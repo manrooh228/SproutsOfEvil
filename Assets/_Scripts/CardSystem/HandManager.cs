@@ -1,3 +1,4 @@
+using Assets._Scripts.BattleSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class HandManager : MonoBehaviour
     [SerializeField] private Transform discardTransform;
 
     [Header("Параметры Руки")]
-    public float cardSpacing = 150f;
+    public float cardSpacing;
     public float curveIntensity = 20f;
     public float rotationIntensity = 5f;
     [SerializeField] private int cardsPerTurn = 5;
@@ -129,8 +130,10 @@ public class HandManager : MonoBehaviour
 
     public void OnCardPlayed(GameObject card)
     {
-        cardsInHand.Remove(card);
-        // Здесь можно добавить анимацию улета в сброс перед Destroy
+        if (cardsInHand.Contains(card))
+        {
+            cardsInHand.Remove(card);
+        }
         UpdateHandVisuals();
         CheckAutoEndTurn();
     }
@@ -172,11 +175,21 @@ public class HandManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        yield return new WaitForSeconds(1f);
-        // Здесь логика хода врага
-        Debug.Log("Ход Врага...");
+        yield return new WaitForSeconds(0.5f);
 
-        // В конце хода врага:
+        // --- ЛОГИКА ХОДА ВРАГА ---
+        Debug.Log("Ход Врага Начался...");
+
+        Enemy enemy = FindFirstObjectByType<Enemy>();
+        if (enemy != null)
+        {
+            // Ждем, пока враг выполнит все свои действия (ExecuteTurn)
+            yield return StartCoroutine(enemy.ExecuteTurn());
+        }
+
+        Debug.Log("Ход Врага Окончен. Возвращаем ход игроку.");
+        // --- КОНЕЦ ХОДА ВРАГА ---
+
         energyManager.ResetEnergy();
         StartPlayerTurn();
     }

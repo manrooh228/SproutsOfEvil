@@ -1,4 +1,5 @@
 using Assets._Scripts.BattleSystem;
+using Assets._Scripts.CardSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,11 +9,15 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private int originalSiblingIndex;
     private Vector3 startPosition;
     private CanvasGroup canvasGroup;
-    private Transform originalParent;
-
 
     private EnergyManager energyManager;
-    void Start() => energyManager = FindFirstObjectByType<EnergyManager>();
+    private HandManager handManager;
+
+    void Start()
+    {
+        energyManager = FindFirstObjectByType<EnergyManager>();
+        handManager = FindFirstObjectByType<HandManager>();
+    }
 
     void Awake()
     {
@@ -23,6 +28,7 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        GetComponentInChildren<CardAnimation>().SetHover(true); // Стоп анимация
         transform.localScale = originalScale * 1.2f;
         originalSiblingIndex = transform.GetSiblingIndex();
         transform.SetAsLastSibling();
@@ -31,6 +37,7 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerExit(PointerEventData eventData)
     {
         if (eventData.dragging) return;
+        GetComponentInChildren<CardAnimation>().SetHover(false);
         transform.localScale = originalScale;
         transform.SetSiblingIndex(originalSiblingIndex);
     }
@@ -38,8 +45,6 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnBeginDrag(PointerEventData eventData)
     {
         startPosition = transform.position;
-        originalParent = transform.parent;
-
         canvasGroup.blocksRaycasts = false;
     }
 
@@ -53,11 +58,10 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         canvasGroup.blocksRaycasts = true;
         GameObject hovered = eventData.pointerCurrentRaycast.gameObject;
 
-        // Проверяем: попали ли мы в Арену ИЛИ прямо во Врага
-        if (hovered != null && (hovered.CompareTag("Arena")))
+        // Теперь детектим только Арену (или Врага, если он перекрывает Арену)
+        if (hovered != null && (hovered.CompareTag("Arena") || hovered.CompareTag("Enemy")))
         {
-            
-            UseCard(hovered);
+            UseCard();
         }
         else
         {
@@ -72,10 +76,8 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         transform.localScale = originalScale;
     }
 
-
-
-    //FUNC METHODS
-    private void UseCard(GameObject target)
+    // FUNC METHODS
+    private void UseCard()
     {
         CardData data = GetComponent<CardDisplay>().cardData;
 
@@ -83,25 +85,25 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             energyManager.SpendEnergy(data.energyCost);
 
-            // Если бросили на врага - наносим урон
-            if (target.CompareTag("Enemy"))
+            // Находим врага на сцене (авто-таргет)
+            Enemy targetEnemy = FindFirstObjectByType<Enemy>();
+
+            if (targetEnemy != null)
             {
-                Debug.Log("Hitted enemy" + target.name);
-                target.GetComponent<Enemy>().TakeDamage(data.damage);
+                Debug.Log("Карта разыграна! Атака по: " + targetEnemy.name);
+                targetEnemy.TakeDamage(data.damage);
             }
 
-            // Логика брони (если есть)
-            // player.AddArmor(data.armor);
+            // Оповещаем HandManager, чтобы он обновил руку и проверил конец хода
+            handManager.OnCardPlayed(gameObject);
 
-            transform.parent.GetComponent<HandManager>().RemoveCard(gameObject);
+            // Объект уничтожается внутри HandManager.OnCardPlayed или здесь
             Destroy(gameObject);
         }
         else
         {
-            // Возврат если мало энергии
             ReturnToHand();
         }
     }
-
 
 }
