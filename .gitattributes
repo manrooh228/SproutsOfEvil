@@ -1,2 +1,17 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Помечаем все .cs файлы как основной программный код
+*.cs linguist-detectable=true	
+
+# Считаем шейдеры документацией или просто отключаем детект
+*.shader linguist-detectable=false
+*.cginc linguist-detectable=false
+*.compute linguist-detectable=false
+*.hlsl linguist-detectable=false
+
+# Исключаем сгенерированные Unity файлы (если они попали в индекс)
+*.meta linguist-vendored
+*.unity linguist-generated
+*.asset linguist-generated
+*.prefab linguist-generated
