@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: db912fa495b14fff8b25bcad0bc4dcd9
+timeCreated: 1633599072
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208357
+  packageName: Smooth Grid Layout UI
+  packageVersion: 1.0.1
+  assetPath: Assets/Plugins/Akassets/SmoothGridLayout/Runtime/LerpToPlaceholder.cs
+  uploadId: 481766

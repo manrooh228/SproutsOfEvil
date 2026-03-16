@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 05ff82505ff76f34287b18c266081e22
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208357
+  packageName: Smooth Grid Layout UI
+  packageVersion: 1.0.1
+  assetPath: Assets/Plugins/Akassets/SmoothGridLayout/SmoothGridLayout.asmdef
+  uploadId: 481766

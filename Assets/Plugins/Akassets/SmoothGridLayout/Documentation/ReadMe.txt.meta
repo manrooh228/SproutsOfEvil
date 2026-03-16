@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a6158051661189e4f8cb0d4028273da3
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208357
+  packageName: Smooth Grid Layout UI
+  packageVersion: 1.0.1
+  assetPath: Assets/Plugins/Akassets/SmoothGridLayout/Documentation/ReadMe.txt
+  uploadId: 481766

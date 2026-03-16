@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: c4b963629151480995baa06d9dce5682
+timeCreated: 1639747621
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208357
+  packageName: Smooth Grid Layout UI
+  packageVersion: 1.0.1
+  assetPath: Assets/Plugins/Akassets/SmoothGridLayout/Editor/SmoothLayoutEditor.cs
+  uploadId: 481766
