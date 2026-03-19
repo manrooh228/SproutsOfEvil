@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afdbd2a1e2fdf3b44911ab389e3eae20, type: 3}
   m_Name: test3
   m_EditorClassIdentifier: 
-  cardName: testEpic
-  description: Deals 3 damage, and its a test card
+  cardName: Deadly Orb
+  description: Deals 3 damage
   rarity: 2
   energyCost: 3
   damage: 3
   block: 0
-  artwork: {fileID: 1858587171256429481, guid: d34dffeaeb4174b42bd1b170644832ef, type: 3}
+  artwork: {fileID: 3702097363471237642, guid: f9bbfd6ad4093104bac91ae50086c9a9, type: 3}

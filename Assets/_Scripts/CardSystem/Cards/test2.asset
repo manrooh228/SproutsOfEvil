@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afdbd2a1e2fdf3b44911ab389e3eae20, type: 3}
   m_Name: test2
   m_EditorClassIdentifier: 
-  cardName: testRare
-  description: Deals 2 damage, and its a test card
+  cardName: Shadow Barier
+  description: Blocks 2 damage
   rarity: 1
   energyCost: 2
-  damage: 2
-  block: 0
-  artwork: {fileID: 1858587171256429481, guid: d34dffeaeb4174b42bd1b170644832ef, type: 3}
+  damage: 0
+  block: 2
+  artwork: {fileID: 9161993793915982731, guid: 5a856861bf30ce5408f99ace4afb3cdf, type: 3}

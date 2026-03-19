@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afdbd2a1e2fdf3b44911ab389e3eae20, type: 3}
   m_Name: test1
   m_EditorClassIdentifier: 
-  cardName: testCom
-  description: Deals 1 damage, and its a test card
+  cardName: Dark Strike
+  description: Deals 1 damage
   rarity: 0
   energyCost: 1
   damage: 1
   block: 0
-  artwork: {fileID: 1858587171256429481, guid: d34dffeaeb4174b42bd1b170644832ef, type: 3}
+  artwork: {fileID: -688056752323280040, guid: 0aa32f63d466eb840b2cd7fdcdb82151, type: 3}
