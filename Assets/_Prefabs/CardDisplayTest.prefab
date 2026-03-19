@@ -49,9 +49,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a179a381bb822cd4d885f944d5f35842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationAmount: 2
-  floatAmount: 5
-  scalePulse: 0.02
+  tiltXAmount: 5
+  tiltYAmount: 8
+  tiltZAmount: 2
   speed: 2
 --- !u!1 &2807344343805564668
 GameObject:
@@ -225,8 +225,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.6822, y: -23.283617}
-  m_SizeDelta: {x: 66.938, y: 53.4318}
+  m_AnchoredPosition: {x: -0.6822, y: -30.486614}
+  m_SizeDelta: {x: 66.938, y: 39.0259}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &948157653368928655
 CanvasRenderer:
@@ -267,8 +267,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4283897416
+  m_fontColor: {r: 0.2817745, g: 0.084905654, b: 0.33962262, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 7.1629257, y: 0.31716156, z: 2.899292, w: 4.775284}
+  m_margin: {x: 7.1629257, y: 0.757576, z: 2.899292, w: 7.3331833}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -361,8 +361,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5432850313474758035}
-  - {fileID: 7129996465340326787}
   - {fileID: 1592398611773827018}
+  - {fileID: 7129996465340326787}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -464,14 +464,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7924528, g: 0.22054112, b: 0.22054112, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1081302260, guid: 1e6c2c6249f88cc4e84f489f8afd6f65, type: 3}
+  m_Sprite: {fileID: 1858587171256429481, guid: d34dffeaeb4174b42bd1b170644832ef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
