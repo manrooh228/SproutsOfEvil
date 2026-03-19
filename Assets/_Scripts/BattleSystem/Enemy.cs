@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets._Scripts.UI;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Assets._Scripts.BattleSystem
     public class Enemy : MonoBehaviour
     {
         [Header("Статистика")]
-        public int maxHealth = 50;
+        public int maxHealth;
         public int currentHealth;
         public TextMeshProUGUI healthText;
 
@@ -20,11 +21,19 @@ namespace Assets._Scripts.BattleSystem
         public int baseAttackDamage = 10;
         public List<string> specialAbilities; // Список названий или ID абилок
 
+        [Header("Effects")]
+        public GameObject textPrefab; // Тот же префаб текста
+        public Transform headPoint;   // Точка над головой врага
+        private Effects playerEf;
+        private Effects myEf;
 
         void Start()
         {
             currentHealth = maxHealth;
             UpdateUI();
+            playerEf = FindFirstObjectByType<Player>().GetComponent<Effects>();
+            myEf = GetComponent<Effects>();
+            myEf.knockbackDistance = myEf.knockbackDistance * -1;
         }
 
         public void TakeDamage(int damage)
@@ -32,6 +41,7 @@ namespace Assets._Scripts.BattleSystem
             currentHealth -= damage;
             UpdateUI();
             if (currentHealth <= 0) Die();
+            myEf.PlayDamageEffect(damage);
         }
 
         private void UpdateUI() => healthText.text = currentHealth.ToString();
@@ -66,17 +76,30 @@ namespace Assets._Scripts.BattleSystem
 
         private void AttackPlayer()
         {
-            Debug.Log($"{gameObject.name} атакует игрока на {baseAttackDamage} урона!");
+            SpawnAbilityText("АТАКА!", Color.yellow);
+            playerEf.PlayDamageEffect(baseAttackDamage);
             // Здесь добавь ссылку на своего игрока:
-            // FindFirstObjectByType<Player>().TakeDamage(baseAttackDamage);
+            FindFirstObjectByType<Player>().TakeDamage(baseAttackDamage);
         }
 
         private void UseSpecialAbility(string abilityName)
         {
-            Debug.Log($"{gameObject.name} использует спец-способность: {abilityName}!");
+            SpawnAbilityText(abilityName.ToUpper(), Color.cyan);
             // Тут можно разветвить логику через switch(abilityName)
         }
 
         void Die() => Destroy(gameObject);
+
+        private void SpawnAbilityText(string message, Color color)
+        {
+            // Найди Canvas на сцене (или создай переменную public Transform canvasTransform)
+            Transform canvasTransform = FindFirstObjectByType<Canvas>().transform;
+
+            // Спавни текст, передавая canvasTransform вторым аргументом
+            GameObject t = Instantiate(textPrefab, headPoint.position, Quaternion.identity, canvasTransform);
+            t.GetComponent<FloatingText>().SetText(message, color);
+        }
+
+
     }
 }

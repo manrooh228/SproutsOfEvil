@@ -1,5 +1,7 @@
 using Assets._Scripts.BattleSystem;
 using Assets._Scripts.CardSystem;
+using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +14,10 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private EnergyManager energyManager;
     private HandManager handManager;
+
+    [Header("Effects")]
+    public GameObject textPrefab; // Тот же префаб текста
+    public Transform headPoint;
 
     void Start()
     {
@@ -79,21 +85,23 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // FUNC METHODS
     private void UseCard()
     {
+        Player player = FindFirstObjectByType<Player>();
+        Enemy targetEnemy = FindFirstObjectByType<Enemy>();
         CardData data = GetComponent<CardDisplay>().cardData;
 
         if (energyManager.CanAfford(data.energyCost))
         {
             energyManager.SpendEnergy(data.energyCost);
 
-            // Находим врага на сцене (авто-таргет)
-            Enemy targetEnemy = FindFirstObjectByType<Enemy>();
-
-            if (targetEnemy != null)
+            if (data.damage > 0 && targetEnemy != null)
             {
-                Debug.Log("Карта разыграна! Атака по: " + targetEnemy.name);
                 targetEnemy.TakeDamage(data.damage);
             }
 
+            if (data.block > 0 && player != null)
+            {
+                player.AddArmor(data.block);
+            }
             // Оповещаем HandManager, чтобы он обновил руку и проверил конец хода
             handManager.OnCardPlayed(gameObject);
 
@@ -104,6 +112,7 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             ReturnToHand();
         }
-    }
 
+
+    }
 }
