@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 
     [Header("Statuses")]
     private List<ActiveStatus> activeStatuses = new List<ActiveStatus>();
-    private int strengthBonus = 0; // Бонус к урону
+    private float strengthBonus = 0f; // Бонус к урону
     private float agilityModifier = 1f; // Множитель входящего урона (ловкость)
 
 
@@ -76,7 +76,7 @@ public class Player : MonoBehaviour
 
     }
 
-    public int GetTotalDamage(int baseDamage) => baseDamage + strengthBonus;
+    public int GetTotalDamage(int baseDamage) => Mathf.RoundToInt(baseDamage + (baseDamage * strengthBonus));
     public int GetTotalUron(int baseDamage) => Mathf.RoundToInt(baseDamage * agilityModifier);
 
     public void Heal(int amount)
@@ -170,14 +170,14 @@ public class Player : MonoBehaviour
                     Debug.Log(status.type + status.remainingTurns + " left");
                     break;
                 case StatusEffectType.StrengthBuff:
-                    strengthBonus += status.value;
+                    strengthBonus = (100 - status.value) / 100f;
                     Debug.Log(status.type + status.remainingTurns + " left");
                     break;
                 case StatusEffectType.AgilityBuff:
                     // Уменьшаем входящий урон на % (например, value = 50 значит 50% урона)
                     agilityModifier = (100 - status.value) / 100f;
                     Debug.Log(status.type.ToString() + status.remainingTurns + " left");
-                    break;//чет не работает
+                    break;//работает 
             }
 
             status.remainingTurns--;
