@@ -156,14 +156,34 @@ namespace Assets._Scripts.BattleSystem
 
         private void UseSpecialAbility(string abilityName)
         {
-            //SpawnAbilityText(abilityName.ToUpper(), Color.cyan);
+            switch (abilityName)
+            {
+                case "SwordSmash":
+                    SwordSmash();
+                    break;
+                case "ShieldCover":
+                    ShieldCover();
+                    break;
+            }
+        }
 
-            //switch (abilityName)
-            //{
-                
+        //Knight
+        private void SwordSmash()
+        {
+            Player player = FindFirstObjectByType<Player>();
+            float enrageMult = isEnraged ? 1.5f : 1.0f;
 
-            //        // Сюда можно добавить другие кейсы
-            //}
+            // Базовый урон * множитель ярости * 1.2 (бонус 20%)
+            int damage = Mathf.RoundToInt(baseAttackDamage * enrageMult * 1.2f);
+
+            SpawnAbilityText("SWORD SMASH!", Color.orangeRed);
+            playerEf.PlayDamageEffect(player.GetTotalUron(damage));
+            player.TakeDamage(player.GetTotalUron(damage));
+        }
+        private void ShieldCover()
+        {
+            isShielded = true;
+            SpawnAbilityText("SHIELD COVER", Color.cyan);
         }
 
         void Die()
