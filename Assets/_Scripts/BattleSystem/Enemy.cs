@@ -76,10 +76,13 @@ namespace Assets._Scripts.BattleSystem
 
         private void AttackPlayer()
         {
-            SpawnAbilityText("АТАКА!", Color.yellow);
-            playerEf.PlayDamageEffect(baseAttackDamage);
+            Player player = FindFirstObjectByType<Player>();
+            int damage = player.GetTotalUron(baseAttackDamage);
+
+            SpawnAbilityText("ATTACK!", Color.yellow);
+            playerEf.PlayDamageEffect(damage);
             // Здесь добавь ссылку на своего игрока:
-            FindFirstObjectByType<Player>().TakeDamage(baseAttackDamage);
+            FindFirstObjectByType<Player>().TakeDamage(damage);
         }
 
         private void UseSpecialAbility(string abilityName)

@@ -56,6 +56,7 @@ public class HandManager : MonoBehaviour
             DrawRandomCardByRarity();
             yield return new WaitForSeconds(0.15f); // Задержка для красоты вылета
         }
+        
     }
 
     private void DrawRandomCardByRarity()
@@ -159,6 +160,7 @@ public class HandManager : MonoBehaviour
         
     public void EndTurn()
     {
+        FindFirstObjectByType<Player>().ProcessStatuses();
         Debug.Log("Завершение...");
         StopAllCoroutines(); // Прерываем текущие анимации выдачи
         StartCoroutine(DiscardHandRoutine());

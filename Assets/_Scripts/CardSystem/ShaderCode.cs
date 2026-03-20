@@ -40,7 +40,7 @@ namespace Assets._Scripts.CardSystem
                 {
                     // ≈сли EPIC Ч принудительно ставим POLYCHROME (твой монохром/радуга)
                     image.material.EnableKeyword("_EDITION_POLYCHROME");
-                    Debug.Log($"Ёффект Epic применен к {cardDisplay.cardData.cardName}");
+                    //Debug.Log($"Ёффект Epic применен к {cardDisplay.cardData.cardName}");
                 }
                 else
                 {
