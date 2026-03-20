@@ -428,7 +428,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Cards
+  m_text: 'Start Game
 
 '
   m_isRightToLeft: 0
@@ -774,15 +774,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817df5436d9308846b9484e6d19462fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  maxHealth: 20
   currentHealth: 0
   healthText: {fileID: 1772846190}
   minActions: 1
   maxActions: 2
-  baseAttackDamage: 5
-  specialAbilities: []
+  baseAttackDamage: 3
+  specialAbilities:
+  - IncreaseDamageLowHP
   textPrefab: {fileID: 318492453109931673, guid: b26c97edbae068743aed5d7c7248a112, type: 3}
+  winMenuPrefab: {fileID: 3996685300571104499, guid: 01d39650c13cf0a49accca8487bebb6f, type: 3}
   headPoint: {fileID: 1025598697}
+  lootTable:
+  - {fileID: 11400000, guid: a690c408d5f9408498c0646634845654, type: 2}
 --- !u!114 &302644408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1554,13 +1558,11 @@ MonoBehaviour:
   cardSpacing: 75
   curveIntensity: 20
   rotationIntensity: 5
-  cardsPerTurn: 5
+  cardsPerTurn: 3
   allAvailableCards:
   - {fileID: 11400000, guid: ccadd292f0da6b14eabb0437acf96825, type: 2}
   - {fileID: 11400000, guid: 8a79efd85bcd65544a02253546f76811, type: 2}
   - {fileID: 11400000, guid: 5a81dc074f5ac544a9bd36195cc0fb6c, type: 2}
-  - {fileID: 11400000, guid: a690c408d5f9408498c0646634845654, type: 2}
-  - {fileID: 11400000, guid: a8769368176213949a9eb285ff5bb33c, type: 2}
   cardsInHand: []
   commonCards: []
   rareCards: []
@@ -1682,8 +1684,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c1832ffc13ed2d46af0b92e940495f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  currentHealth: 50
+  maxHealth: 100
+  currentHealth: 100
   armor: 0
   healthText: {fileID: 1026625553}
   textPrefab: {fileID: 0}
@@ -1823,7 +1825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &715593834
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2360,8 +2362,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2423,7 +2425,7 @@ GameObject:
   - component: {fileID: 1091802757}
   - component: {fileID: 1091802758}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3070,7 +3072,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 485, y: 247}
+  m_AnchoredPosition: {x: 463, y: 245}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1772846190
@@ -3112,7 +3114,7 @@ MonoBehaviour:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
     topRight: {r: 0.19709802, g: 1, b: 0, a: 1}
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 0.19709802, g: 1, b: 0, a: 1}
+    bottomRight: {r: 0.24614811, g: 1, b: 0, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -3122,14 +3124,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
