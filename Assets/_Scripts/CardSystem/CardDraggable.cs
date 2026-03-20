@@ -95,17 +95,20 @@ public class CardDraggable : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
             if (data.damage > 0 && targetEnemy != null)
             {
-                targetEnemy.TakeDamage(data.damage);
+                int totalDmg = player != null ? player.GetTotalDamage(data.damage) : data.damage;
+                targetEnemy?.TakeDamage(totalDmg);
             }
 
-            if (data.block > 0 && player != null)
+            if (data.block > 0) player.AddArmor(data.block);
+            if (data.heal > 0) player.Heal(data.heal);
+
+            if (data.duration > 0 && data.effectType != StatusEffectType.None)
             {
-                player.AddArmor(data.block);
-            }
-            // Оповещаем HandManager, чтобы он обновил руку и проверил конец хода
-            handManager.OnCardPlayed(gameObject);
+                player.ApplyStatus(data.effectType, data.effectValue, data.duration);
 
-            // Объект уничтожается внутри HandManager.OnCardPlayed или здесь
+            }
+
+            handManager.OnCardPlayed(gameObject);
             Destroy(gameObject);
         }
         else
