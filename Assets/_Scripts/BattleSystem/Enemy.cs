@@ -19,11 +19,16 @@ namespace Assets._Scripts.BattleSystem
 
         [Header("Способности")]
         public int baseAttackDamage = 10;
-        public List<string> specialAbilities; // Список названий или ID абилок
+        public List<string> specialAbilities;
+
+        [Header("Параметры Лоу-ХП")]
+        private bool isEnraged = false; // Флаг, что эффект уже активен
+        //private float damageMultiplier = 1.0f; // Текущий множитель урона
 
         [Header("Effects")]
-        public GameObject textPrefab; // Тот же префаб текста
-        public Transform headPoint;   // Точка над головой врага
+        public GameObject textPrefab;
+        public GameObject winMenuPrefab;
+        public Transform headPoint;
         private Effects playerEf;
         private Effects myEf;
 
@@ -33,6 +38,7 @@ namespace Assets._Scripts.BattleSystem
             UpdateUI();
             playerEf = FindFirstObjectByType<Player>().GetComponent<Effects>();
             myEf = GetComponent<Effects>();
+            // Инвертируем отталкивание, чтобы враг дергался в другую сторону
             myEf.knockbackDistance = myEf.knockbackDistance * -1;
         }
 
@@ -40,28 +46,42 @@ namespace Assets._Scripts.BattleSystem
         {
             currentHealth -= damage;
             UpdateUI();
+
+            // ПРОВЕРКА: Если HP упало ниже 50%, активируем IncreaseDamageLowHP
+            CheckLowHPStatus();
+
             if (currentHealth <= 0) Die();
             myEf.PlayDamageEffect(damage);
         }
 
+        private void CheckLowHPStatus()
+        {
+            // Проверяем 50% порог
+            if (!isEnraged && currentHealth <= maxHealth * 0.5f)
+            {
+                isEnraged = true;
+                // Сразу визуально оповещаем игрока
+                SpawnAbilityText("ENRAGE: DMG UP!", Color.red);
+            }
+        }
+
         private void UpdateUI() => healthText.text = currentHealth.ToString();
 
-        // Точка входа для начала хода врага
         public IEnumerator ExecuteTurn()
         {
             int actionsCount = Random.Range(minActions, maxActions + 1);
-            Debug.Log($"{gameObject.name} планирует сделать {actionsCount} действий.");
 
+            Debug.Log("ENEMY WANT TO DO " + actionsCount);
             for (int i = 0; i < actionsCount; i++)
             {
-                yield return new WaitForSeconds(1f); // Пауза между ударами
+                yield return new WaitForSeconds(1.2f);
                 PerformRandomAction();
             }
         }
 
         private void PerformRandomAction()
         {
-            // Рандом: 0 - Атака, 1+ - СпешалАбилки
+
             int choice = Random.Range(0, specialAbilities.Count + 1);
 
             if (choice == 0)
@@ -70,39 +90,58 @@ namespace Assets._Scripts.BattleSystem
             }
             else
             {
-                UseSpecialAbility(specialAbilities[choice - 1]);
+                string ability = specialAbilities[choice - 1];
+
+                if (ability == "IncreaseDamageLowHP")
+                {
+                    PerformRandomAction();
+                }
             }
         }
 
         private void AttackPlayer()
         {
             Player player = FindFirstObjectByType<Player>();
-            int damage = player.GetTotalUron(baseAttackDamage);
 
-            SpawnAbilityText("ATTACK!", Color.yellow);
-            playerEf.PlayDamageEffect(damage);
-            // Здесь добавь ссылку на своего игрока:
-            FindFirstObjectByType<Player>().TakeDamage(damage);
+            // Рассчитываем урон: базовый + множитель ярости (например +50% урона если Enraged)
+            float finalDamageMultiplier = isEnraged ? 1.5f : 1.0f;
+            int damage = Mathf.RoundToInt(baseAttackDamage * finalDamageMultiplier);
+
+            SpawnAbilityText(isEnraged ? "CRITICAL ATTACK!" : "ATTACK!", isEnraged ? Color.red : Color.yellow);
+
+            playerEf.PlayDamageEffect(player.GetTotalUron(damage));
+            player.TakeDamage(player.GetTotalUron(damage));
         }
 
         private void UseSpecialAbility(string abilityName)
         {
-            SpawnAbilityText(abilityName.ToUpper(), Color.cyan);
-            // Тут можно разветвить логику через switch(abilityName)
+            //SpawnAbilityText(abilityName.ToUpper(), Color.cyan);
+
+            //switch (abilityName)
+            //{
+                
+
+            //        // Сюда можно добавить другие кейсы
+            //}
         }
 
-        void Die() => Destroy(gameObject);
+        void Die()
+        {
+            Destroy(gameObject);
+
+
+            Transform canvasTransform = FindFirstObjectByType<Canvas>().transform;
+            GameObject winMenu = Instantiate(winMenuPrefab, Vector2.zero, Quaternion.identity, canvasTransform);
+
+        }
 
         private void SpawnAbilityText(string message, Color color)
         {
-            // Найди Canvas на сцене (или создай переменную public Transform canvasTransform)
             Transform canvasTransform = FindFirstObjectByType<Canvas>().transform;
-
-            // Спавни текст, передавая canvasTransform вторым аргументом
             GameObject t = Instantiate(textPrefab, headPoint.position, Quaternion.identity, canvasTransform);
             t.GetComponent<FloatingText>().SetText(message, color);
         }
 
-
+        
     }
 }
