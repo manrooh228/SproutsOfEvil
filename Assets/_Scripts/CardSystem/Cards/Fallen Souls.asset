@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdbd2a1e2fdf3b44911ab389e3eae20, type: 3}
-  m_Name: test3
+  m_Name: Fallen Souls
   m_EditorClassIdentifier: 
-  cardName: Deadly Orb
-  description: Deals 3 damage
-  rarity: 2
-  energyCost: 3
-  damage: 3
+  cardName: Fallen Souls
+  description: 'Heals 3 hp '
+  rarity: 1
+  energyCost: 1
+  damage: 0
   block: 0
-  artwork: {fileID: 3702097363471237642, guid: f9bbfd6ad4093104bac91ae50086c9a9, type: 3}
+  heal: 3
+  artwork: {fileID: 2086074205283963248, guid: 824bb4133749c3c48b306743f5ac3da4, type: 3}

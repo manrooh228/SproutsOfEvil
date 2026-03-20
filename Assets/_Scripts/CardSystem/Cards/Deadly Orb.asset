@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdbd2a1e2fdf3b44911ab389e3eae20, type: 3}
-  m_Name: test1
+  m_Name: Deadly Orb
   m_EditorClassIdentifier: 
-  cardName: Dark Strike
-  description: Deals 1 damage
-  rarity: 0
-  energyCost: 1
-  damage: 1
+  cardName: Deadly Orb
+  description: Deals 3 damage
+  rarity: 2
+  energyCost: 3
+  damage: 3
   block: 0
-  artwork: {fileID: -688056752323280040, guid: 0aa32f63d466eb840b2cd7fdcdb82151, type: 3}
+  artwork: {fileID: 3702097363471237642, guid: f9bbfd6ad4093104bac91ae50086c9a9, type: 3}
