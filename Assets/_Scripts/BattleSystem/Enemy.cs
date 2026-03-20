@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets._Scripts.BattleSystem
 {
@@ -21,7 +22,7 @@ namespace Assets._Scripts.BattleSystem
         public int baseAttackDamage = 10;
         public List<string> specialAbilities;
 
-        [Header("Параметры Лоу-ХП")]
+        [Header("Состояние крестьянина")]
         private bool isEnraged = false; // Флаг, что эффект уже активен
         //private float damageMultiplier = 1.0f; // Текущий множитель урона
 
@@ -31,6 +32,14 @@ namespace Assets._Scripts.BattleSystem
         public Transform headPoint;
         private Effects playerEf;
         private Effects myEf;
+
+        [Header("Награды за победу")]
+        public List<CardData> lootTable; // Сюда в инспекторе кидай карты, которые выпадут после смерти
+
+
+
+        [Header("Состояние Рыцаря")]
+        private bool isShielded = false;
 
         void Start()
         {
@@ -44,24 +53,51 @@ namespace Assets._Scripts.BattleSystem
 
         public void TakeDamage(int damage)
         {
-            currentHealth -= damage;
+            // Если щит активен, снижаем урон (например, на 50%)
+            int finalDamage = isShielded ? Mathf.RoundToInt(damage * 0.5f) : damage;
+
+            if (isShielded)
+            {
+                SpawnAbilityText("BLOCKED!", Color.blue);
+                isShielded = false; // Щит ломается после получения урона или в начале следующего хода
+            }
+
+            currentHealth -= finalDamage;
             UpdateUI();
-
-            // ПРОВЕРКА: Если HP упало ниже 50%, активируем IncreaseDamageLowHP
-            CheckLowHPStatus();
-
-            if (currentHealth <= 0) Die();
-            myEf.PlayDamageEffect(damage);
+            StartCoroutine(HandleDamageAndEnrage(finalDamage));
         }
 
-        private void CheckLowHPStatus()
+        private IEnumerator HandleDamageAndEnrage(int damage)
         {
-            // Проверяем 50% порог
-            if (!isEnraged && currentHealth <= maxHealth * 0.5f)
+            // 1. Сначала показываем эффект получения урона (тряска, вспышка)
+            myEf.PlayDamageEffect(damage);
+
+            // 2. Ждем, пока эффект урона почти закончится (например, 0.5 секунды)
+            if (specialAbilities != null && specialAbilities.Contains("IncreaseDamageLowHP"))
             {
-                isEnraged = true;
-                // Сразу визуально оповещаем игрока
-                SpawnAbilityText("ENRAGE: DMG UP!", Color.red);
+                yield return new WaitForSeconds(0.5f);
+            }
+            // 3. Проверяем: 
+            // - Что эффект еще не активен (!isEnraged)
+            // - Что враг еще жив (currentHealth > 0)
+            // - Что здоровье упало ниже 50%
+            // - ЧТО У ВРАГА ЕСТЬ НУЖНАЯ АБИЛКА (specialAbilities.Contains)
+            if (!isEnraged && currentHealth > 0 && currentHealth <= maxHealth * 0.5f)
+            {
+                if (specialAbilities != null && specialAbilities.Contains("IncreaseDamageLowHP"))
+                {
+                    isEnraged = true;
+                    SpawnAbilityText("ENRAGE: DMG UP!", Color.whiteSmoke);
+
+                    // Небольшая пауза, чтобы игрок успел прочитать текст перед следующим событием
+                    yield return new WaitForSeconds(0.3f);
+                }
+            }
+
+            // 4. Только в самом конце проверяем смерть
+            if (currentHealth <= 0)
+            {
+                Die();
             }
         }
 
@@ -92,9 +128,14 @@ namespace Assets._Scripts.BattleSystem
             {
                 string ability = specialAbilities[choice - 1];
 
+                // Если это пассивка, перевыбираем действие
                 if (ability == "IncreaseDamageLowHP")
                 {
                     PerformRandomAction();
+                }
+                else
+                {
+                    UseSpecialAbility(ability);
                 }
             }
         }
@@ -127,16 +168,65 @@ namespace Assets._Scripts.BattleSystem
 
         void Die()
         {
-            Destroy(gameObject);
+            // 1. Делаем карты в руке невидимыми
+            HidePlayerHand();
 
-
+            // 2. Создаем меню победы
             Transform canvasTransform = FindFirstObjectByType<Canvas>().transform;
-            GameObject winMenu = Instantiate(winMenuPrefab, Vector2.zero, Quaternion.identity, canvasTransform);
+            GameObject winMenuObj = Instantiate(winMenuPrefab, canvasTransform);
+            WinMenu winMenu = winMenuObj.GetComponent<WinMenu>();
+
+            if (winMenu != null)
+            {
+                winMenu.SetupFixedRewards(lootTable);
+            }
+
+            // 3. Останавливаем логику руки, чтобы карты не добирались во время меню
+            HandManager hand = FindFirstObjectByType<HandManager>();
+            if (hand != null)
+            {
+                hand.StopAllCoroutines();
+                // Отключаем скрипт, чтобы Update() и добор карт не работали
+                hand.enabled = false;
+            }
+
+            Destroy(gameObject);
 
         }
 
-        private void SpawnAbilityText(string message, Color color)
+        private void HidePlayerHand()
         {
+            HandManager hand = FindFirstObjectByType<HandManager>();
+            if (hand != null)
+            {
+                // Получаем доступ к списку объектов карт (метод в HandManager.cs должен быть public)
+                List<GameObject> handCards = hand.GetCardsInHand();
+
+                foreach (GameObject card in handCards)
+                {
+                    // Убираем видимость, отключая Image
+                    Image cardImage = card.GetComponentInChildren<Image>();
+                    if (cardImage != null)
+                    {
+                        cardImage.enabled = false;
+                    }
+
+                    // Опционально: отключаем текст, если он есть (TMPro)
+                    CanvasGroup cardCanvasGroup = card.GetComponent<CanvasGroup>();
+                    if (cardCanvasGroup != null)
+                    {
+                        cardCanvasGroup.alpha = 0f; // Делаем прозрачным всю группу (вместе с текстом)
+                        cardCanvasGroup.blocksRaycasts = false; // Чтобы по ним нельзя было кликать
+                    }
+                }
+
+                // Очищаем сам список, чтобы HandManager "забыл" о них (или оставь, если уничтожишь позже)
+                // handCards.Clear();
+            }
+        }
+
+        private void SpawnAbilityText(string message, Color color)
+        { 
             Transform canvasTransform = FindFirstObjectByType<Canvas>().transform;
             GameObject t = Instantiate(textPrefab, headPoint.position, Quaternion.identity, canvasTransform);
             t.GetComponent<FloatingText>().SetText(message, color);

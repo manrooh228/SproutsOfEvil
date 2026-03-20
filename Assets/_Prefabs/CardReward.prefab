@@ -436,9 +436,8 @@ GameObject:
   - component: {fileID: 4454889317693594526}
   - component: {fileID: 3065363727241233628}
   - component: {fileID: 3547419258202580954}
-  - component: {fileID: 5827542150664669987}
   m_Layer: 5
-  m_Name: CardDisplayTest
+  m_Name: CardReward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -453,7 +452,7 @@ RectTransform:
   m_GameObject: {fileID: 5556079950814350480}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8496032565015917694}
@@ -489,20 +488,6 @@ MonoBehaviour:
   nameText: {fileID: 7802162666129866061}
   descriptionText: {fileID: 5524204013972628197}
   artworkImage: {fileID: 6451648524399052703}
---- !u!114 &5827542150664669987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5556079950814350480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5c801cc6b36c3b4baf2ffd32044f105, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textPrefab: {fileID: 0}
-  headPoint: {fileID: 0}
 --- !u!1 &6122835032793389544
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,6 +21,9 @@ public class HandManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> cardsInHand = new List<GameObject>();
 
+    public List<GameObject> GetCardsInHand() => cardsInHand;
+
+
     [SerializeField] private List<CardData> commonCards = new List<CardData>();
     [SerializeField] private List<CardData> rareCards = new List<CardData>();
     [SerializeField] private List<CardData> epicCards = new List<CardData>();
@@ -40,6 +43,7 @@ public class HandManager : MonoBehaviour
     {
         energyManager = FindFirstObjectByType<EnergyManager>();
         SortCardsByRarity();
+        StartPlayerTurn();
     }
 
     private void SortCardsByRarity()
@@ -246,7 +250,7 @@ public class HandManager : MonoBehaviour
         StartCoroutine(DiscardHandRoutine());
     }
 
-    IEnumerator DiscardHandRoutine()
+    public IEnumerator DiscardHandRoutine()
     {
         List<GameObject> toDiscard = new List<GameObject>(cardsInHand);
         cardsInHand.Clear();
@@ -276,7 +280,7 @@ public class HandManager : MonoBehaviour
         StartPlayerTurn();
     }
 
-    IEnumerator AnimateToDiscard(GameObject card)
+    public IEnumerator AnimateToDiscard(GameObject card)
     {
         float duration = 0.5f;
         float elapsed = 0;
@@ -305,5 +309,17 @@ public class HandManager : MonoBehaviour
         }
     }
 
+    public void AddNewCardToPool(CardData newCard)
+    {
+        if (allAvailableCards.Contains(newCard)) return; // Чтобы не дублировать саму базу
 
+        allAvailableCards.Add(newCard);
+
+        // Сразу сортируем в нужный список для рандома
+        if (newCard.rarity == CardRarity.Common) commonCards.Add(newCard);
+        else if (newCard.rarity == CardRarity.Rare) rareCards.Add(newCard);
+        else if (newCard.rarity == CardRarity.Epic) epicCards.Add(newCard);
+
+        Debug.Log($"Карта {newCard.cardName} добавлена в колоду!");
+    }
 }
