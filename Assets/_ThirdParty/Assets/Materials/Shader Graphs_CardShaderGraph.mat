@@ -53,9 +53,9 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _frequency: 1
-    - _poly_brightness: 0.76
-    - _poly_frequency: 0.8
-    - _poly_power: 0.05
+    - _poly_brightness: 0.4
+    - _poly_frequency: 1
+    - _poly_power: 0.04
     - _yDirection: 1
     m_Colors:
     - _Rotation: {r: 0, g: 0, b: 0, a: 0}

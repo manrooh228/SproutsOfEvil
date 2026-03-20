@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdbd2a1e2fdf3b44911ab389e3eae20, type: 3}
-  m_Name: The Veil
+  m_Name: ___Deadly Orb
   m_EditorClassIdentifier: 
-  cardName: The Veil
-  description: Receive 50% less damage for 2 turns(Additional Use Increases duration)
-  rarity: 1
-  energyCost: 1
-  damage: 0
+  cardName: Deadly Orb
+  description: Deals 15 damage
+  rarity: 2
+  energyCost: 3
+  damage: 15
   block: 0
   heal: 0
-  effectType: 5
-  effectValue: 50
-  duration: 2
-  artwork: {fileID: -3383814709399097569, guid: 1e6fa401ed5152b4e99a114fe1a9a646, type: 3}
+  effectType: 0
+  effectValue: 0
+  duration: 0
+  cooldownTurns: 10
+  artwork: {fileID: 3702097363471237642, guid: f9bbfd6ad4093104bac91ae50086c9a9, type: 3}

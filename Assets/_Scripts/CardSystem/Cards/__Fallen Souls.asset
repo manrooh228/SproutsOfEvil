@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdbd2a1e2fdf3b44911ab389e3eae20, type: 3}
-  m_Name: Dark Strike
+  m_Name: __Fallen Souls
   m_EditorClassIdentifier: 
-  cardName: Dark Strike
-  description: Deals 1 damage
-  rarity: 0
+  cardName: Fallen Souls
+  description: 'Heals 3 hp '
+  rarity: 1
   energyCost: 1
-  damage: 1
+  damage: 0
   block: 0
-  artwork: {fileID: -688056752323280040, guid: 0aa32f63d466eb840b2cd7fdcdb82151, type: 3}
+  heal: 3
+  artwork: {fileID: 2086074205283963248, guid: 824bb4133749c3c48b306743f5ac3da4, type: 3}

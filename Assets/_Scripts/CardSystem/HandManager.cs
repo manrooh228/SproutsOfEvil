@@ -20,11 +20,21 @@ public class HandManager : MonoBehaviour
     [SerializeField] private List<CardData> allAvailableCards;
 
     [SerializeField] private List<GameObject> cardsInHand = new List<GameObject>();
+
     [SerializeField] private List<CardData> commonCards = new List<CardData>();
     [SerializeField] private List<CardData> rareCards = new List<CardData>();
     [SerializeField] private List<CardData> epicCards = new List<CardData>();
+    public List<CardData> GetCommonPool() => commonCards;
+    public List<CardData> GetRarePool() => rareCards;
+    public List<CardData> GetEpicPool() => epicCards;
+
+
+    private Dictionary<CardData, int> cardCooldowns = new Dictionary<CardData, int>();
 
     private EnergyManager energyManager;
+
+
+
 
     void Start()
     {
@@ -45,7 +55,7 @@ public class HandManager : MonoBehaviour
     // Привязать к кнопке "Начать Бой" или "Конец Хода"
     public void StartPlayerTurn()
     {
-        if (cardsInHand.Count > 0) return; // Чтобы не дублировать ход
+        if (cardsInHand.Count > 0) return; // Чтобы не дублировать 
         StartCoroutine(DrawStartingHand());
     }
 
@@ -64,18 +74,64 @@ public class HandManager : MonoBehaviour
         int roll = Random.Range(0, 100);
         CardData selectedData = null;
 
-        // Шансы: 50% Common, 30% Rare, 20% Epic
-        if (roll < 50) selectedData = GetRandomFromList(commonCards);
-        else if (roll < 80) selectedData = GetRandomFromList(rareCards);
-        else selectedData = GetRandomFromList(epicCards);
+        // Проверяем, есть ли уже Эпическая карта в руке
+        bool hasEpicInHand = CheckIfEpicInHand();
+
+        if (roll < 60)
+        {
+            selectedData = GetRandomFromList(commonCards);
+        }
+        else if (roll < 90)
+        {
+            selectedData = GetRandomFromList(rareCards) ?? GetRandomFromList(commonCards);
+        }
+        else
+        {
+            // Пытаемся вытащить Epic
+            if (!hasEpicInHand)
+            {
+                selectedData = GetRandomFromList(epicCards);
+            }
+
+            // Если Epic уже есть в руке ИЛИ список эпиков пуст/в откате
+            if (selectedData == null)
+            {
+                // Шанс 25% на Rare, иначе 75% на Common
+                int subRoll = Random.Range(0, 100);
+                if (subRoll < 25)
+                    selectedData = GetRandomFromList(rareCards) ?? GetRandomFromList(commonCards);
+                else
+                    selectedData = GetRandomFromList(commonCards);
+            }
+        }
 
         if (selectedData != null) SpawnCard(selectedData);
     }
 
+    private bool CheckIfEpicInHand()
+    {
+        foreach (GameObject cardObj in cardsInHand)
+        {
+            CardDisplay display = cardObj.GetComponent<CardDisplay>();
+            if (display != null && display.cardData != null && display.cardData.rarity == CardRarity.Epic)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     private CardData GetRandomFromList(List<CardData> list)
     {
         if (list.Count == 0) return null;
-        return list[Random.Range(0, list.Count)];
+
+        List<CardData> available = list.FindAll(c => !cardCooldowns.ContainsKey(c));
+
+        if (available.Count == 0) return null;
+
+        return available[Random.Range(0, available.Count)];
     }
 
     private void SpawnCard(CardData data)
@@ -131,12 +187,35 @@ public class HandManager : MonoBehaviour
 
     public void OnCardPlayed(GameObject card)
     {
-        if (cardsInHand.Contains(card))
+        CardData data = card.GetComponent<CardDisplay>().cardData;
+
+        // Если у карты прописан откат, добавляем её в список ожидания
+        if (data.cooldownTurns > 0)
         {
-            cardsInHand.Remove(card);
+            if (cardCooldowns.ContainsKey(data)) cardCooldowns[data] = data.cooldownTurns;
+            else cardCooldowns.Add(data, data.cooldownTurns);
+
+            Debug.Log($"Карта {data.cardName} ушла на перезарядку: {data.cooldownTurns} ход(а).");
         }
+
+        if (cardsInHand.Contains(card)) cardsInHand.Remove(card);
+
         UpdateHandVisuals();
         CheckAutoEndTurn();
+    }
+
+    private void ReduceCooldowns()
+    {
+        List<CardData> keys = new List<CardData>(cardCooldowns.Keys);
+        foreach (var card in keys)
+        {
+            cardCooldowns[card]--;
+            if (cardCooldowns[card] <= 0)
+            {
+                cardCooldowns.Remove(card);
+                Debug.Log($"Карта {card.cardName} снова доступна!");
+            }
+        }
     }
 
     public void CheckAutoEndTurn()
@@ -160,6 +239,7 @@ public class HandManager : MonoBehaviour
         
     public void EndTurn()
     {
+        ReduceCooldowns();
         FindFirstObjectByType<Player>().ProcessStatuses();
         Debug.Log("Завершение...");
         StopAllCoroutines(); // Прерываем текущие анимации выдачи
@@ -224,4 +304,6 @@ public class HandManager : MonoBehaviour
 
         }
     }
+
+
 }
