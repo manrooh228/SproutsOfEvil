@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ActiveStatus
 {
@@ -103,7 +104,10 @@ public class Player : MonoBehaviour
         else
             healthText.text = currentHealth.ToString();
     }
-    void Die() => Debug.Log("ты проиграл!");
+    void Die()
+    {
+        SceneManager.LoadScene("DeathScene");
+    }
 
 
 

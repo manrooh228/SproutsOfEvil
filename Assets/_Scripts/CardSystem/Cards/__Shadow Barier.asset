@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: __Shadow Barier
   m_EditorClassIdentifier: 
   cardName: Shadow Barier
-  description: Blocks 5 damage
+  description: Blocks 4 damage
   rarity: 0
   energyCost: 2
   damage: 0
-  block: 5
+  block: 4
   heal: 0
   effectType: 0
   effectValue: 0
   duration: 0
-  cooldownTurns: 0
+  cooldownTurns: 2
   artwork: {fileID: 9161993793915982731, guid: 5a856861bf30ce5408f99ace4afb3cdf, type: 3}

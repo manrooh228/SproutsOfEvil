@@ -22,5 +22,5 @@ MonoBehaviour:
   effectType: 0
   effectValue: 0
   duration: 0
-  cooldownTurns: 1
+  cooldownTurns: 2
   artwork: {fileID: 3702097363471237642, guid: f9bbfd6ad4093104bac91ae50086c9a9, type: 3}

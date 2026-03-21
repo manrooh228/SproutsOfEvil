@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets._Scripts.BattleSystem
@@ -56,7 +57,7 @@ namespace Assets._Scripts.BattleSystem
         public void TakeDamage(int damage)
         {
             // Если щит активен, снижаем урон (например, на 50%)
-            int finalDamage = isShielded ? Mathf.RoundToInt(damage * 0.5f) : damage;
+            int finalDamage = isShielded ? Mathf.RoundToInt(damage * 0.8f) : damage;
 
             if (isShielded)
             {
@@ -200,6 +201,10 @@ namespace Assets._Scripts.BattleSystem
         {
             // 1. Делаем карты в руке невидимыми
             HidePlayerHand();
+
+            string currentScene = SceneManager.GetActiveScene().name;
+            if (currentScene == "ThirdBattle")
+                SceneManager.LoadScene("AfterBattleCutscene");
 
             // 2. Создаем меню победы
             Transform canvasTransform = FindFirstObjectByType<Canvas>().transform;
