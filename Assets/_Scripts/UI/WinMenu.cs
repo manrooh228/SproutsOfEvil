@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets._Scripts.UI
@@ -59,8 +60,29 @@ namespace Assets._Scripts.UI
                 hand.AddNewCardToPool(card);
             }
 
-            // Тут можно загрузить следующую сцену или вернуться на карту
+            LoadNextBattle();
+
             Destroy(gameObject);
+        }
+
+        private void LoadNextBattle()
+        {
+            string currentScene = SceneManager.GetActiveScene().name;
+
+            if (currentScene == "FirstBattle")
+            {
+                SceneManager.LoadScene("SecondBattle");
+            }
+            else if (currentScene == "SecondBattle")
+            {
+                SceneManager.LoadScene("ThirdBattle");
+            }
+            else
+            {
+                // Если это была последняя сцена, возвращаемся в меню или на карту
+                Debug.Log("Все битвы пройдены!");
+                // SceneManager.LoadScene("MainMenu"); 
+            }
         }
     }
 }

@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817df5436d9308846b9484e6d19462fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 60
+  maxHealth: 1
   currentHealth: 0
   healthText: {fileID: 1772846190}
   minActions: 1
@@ -1566,6 +1566,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a81dc074f5ac544a9bd36195cc0fb6c, type: 2}
   - {fileID: 11400000, guid: a690c408d5f9408498c0646634845654, type: 2}
   - {fileID: 11400000, guid: a8769368176213949a9eb285ff5bb33c, type: 2}
+  - {fileID: 11400000, guid: c72f2c201da44de46ab24ea88ff4d67f, type: 2}
   cardsInHand: []
   commonCards: []
   rareCards: []
@@ -1688,7 +1689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 50
-  currentHealth: 50
+  currentHealth: 100
   armor: 0
   healthText: {fileID: 1026625553}
   textPrefab: {fileID: 0}
