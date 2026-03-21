@@ -40,6 +40,8 @@ namespace Assets._Scripts.BattleSystem
 
         [Header("Состояние Рыцаря")]
         private bool isShielded = false;
+        private bool hasHealed = false;
+
 
         void Start()
         {
@@ -69,32 +71,41 @@ namespace Assets._Scripts.BattleSystem
 
         private IEnumerator HandleDamageAndEnrage(int damage)
         {
-            // 1. Сначала показываем эффект получения урона (тряска, вспышка)
+            // 1. Эффект урона
             myEf.PlayDamageEffect(damage);
+            yield return new WaitForSeconds(0.5f);
 
-            // 2. Ждем, пока эффект урона почти закончится (например, 0.5 секунды)
-            if (specialAbilities != null && specialAbilities.Contains("IncreaseDamageLowHP"))
-            {
-                yield return new WaitForSeconds(0.5f);
-            }
-            // 3. Проверяем: 
-            // - Что эффект еще не активен (!isEnraged)
-            // - Что враг еще жив (currentHealth > 0)
-            // - Что здоровье упало ниже 50%
-            // - ЧТО У ВРАГА ЕСТЬ НУЖНАЯ АБИЛКА (specialAbilities.Contains)
-            if (!isEnraged && currentHealth > 0 && currentHealth <= maxHealth * 0.5f)
+            // 2. Проверка ENRAGE (50% HP)
+            if (!isEnraged && currentHealth > 0 && currentHealth <= maxHealth * 0.2f)
             {
                 if (specialAbilities != null && specialAbilities.Contains("IncreaseDamageLowHP"))
                 {
                     isEnraged = true;
                     SpawnAbilityText("ENRAGE: DMG UP!", Color.whiteSmoke);
-
-                    // Небольшая пауза, чтобы игрок успел прочитать текст перед следующим событием
-                    yield return new WaitForSeconds(0.3f);
+                    yield return new WaitForSeconds(0.6f); // Даем время прочитать
                 }
             }
 
-            // 4. Только в самом конце проверяем смерть
+            // 3. СВЯЩЕННЫЙ ОБЕТ (30% HP)
+            if (!hasHealed && currentHealth > 0 && currentHealth <= maxHealth * 0.4f)
+            {
+                if (specialAbilities != null && specialAbilities.Contains("HolyVow"))
+                {
+                    hasHealed = true;
+
+                    // Лечим, например, на 40% от макс. здоровья
+                    int healAmount = Mathf.RoundToInt(maxHealth * 0.2f);
+                    currentHealth += healAmount;
+
+                    if (currentHealth > maxHealth) currentHealth = maxHealth;
+
+                    UpdateUI();
+                    SpawnAbilityText("HOLY HEAL!", Color.green);
+                    yield return new WaitForSeconds(0.8f);
+                }
+            }
+
+            // 4. Проверка смерти
             if (currentHealth <= 0)
             {
                 Die();
@@ -117,7 +128,6 @@ namespace Assets._Scripts.BattleSystem
 
         private void PerformRandomAction()
         {
-
             int choice = Random.Range(0, specialAbilities.Count + 1);
 
             if (choice == 0)
@@ -128,8 +138,8 @@ namespace Assets._Scripts.BattleSystem
             {
                 string ability = specialAbilities[choice - 1];
 
-                // Если это пассивка, перевыбираем действие
-                if (ability == "IncreaseDamageLowHP")
+                // Пропускаем ход для пассивных способностей
+                if (ability == "IncreaseDamageLowHP" || ability == "HolyVow")
                 {
                     PerformRandomAction();
                 }

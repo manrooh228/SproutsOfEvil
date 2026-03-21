@@ -735,7 +735,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8121221533026567929, guid: 3d529e262076ee44baf3a47d9c1d632b, type: 3}
+  m_Sprite: {fileID: -2599515326900040012, guid: b93cd5910b71a9b41a3cd9989ee93fc0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -756,7 +756,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 2.36, y: -0.63, z: -7.69}
-  m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1091802757}
@@ -774,15 +774,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817df5436d9308846b9484e6d19462fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
+  maxHealth: 90
   currentHealth: 0
   healthText: {fileID: 1772846190}
   minActions: 1
   maxActions: 1
-  baseAttackDamage: 5
+  baseAttackDamage: 10
   specialAbilities:
   - SwordSmash
-  - ShieldCover
+  - HolyVow
+  - IncreaseDamageLowHP
   textPrefab: {fileID: 318492453109931673, guid: b26c97edbae068743aed5d7c7248a112, type: 3}
   winMenuPrefab: {fileID: 3996685300571104499, guid: 01d39650c13cf0a49accca8487bebb6f, type: 3}
   headPoint: {fileID: 1025598697}
@@ -1559,7 +1560,7 @@ MonoBehaviour:
   cardSpacing: 75
   curveIntensity: 20
   rotationIntensity: 5
-  cardsPerTurn: 3
+  cardsPerTurn: 4
   allAvailableCards:
   - {fileID: 11400000, guid: ccadd292f0da6b14eabb0437acf96825, type: 2}
   - {fileID: 11400000, guid: 8a79efd85bcd65544a02253546f76811, type: 2}
@@ -1583,7 +1584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe000e49c22a3f4c9435ac82441ab6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 3
+  maxEnergy: 4
   currentEnergy: 0
   energyText: {fileID: 147097931}
 --- !u!1 &629453216
@@ -1688,8 +1689,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c1832ffc13ed2d46af0b92e940495f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  currentHealth: 100
+  maxHealth: 60
+  currentHealth: 60
   armor: 0
   healthText: {fileID: 1026625553}
   textPrefab: {fileID: 0}
@@ -3076,7 +3077,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 463, y: 287}
+  m_AnchoredPosition: {x: 463, y: 338}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1772846190
